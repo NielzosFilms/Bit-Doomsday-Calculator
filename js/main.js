@@ -256,8 +256,6 @@ function dateOnChange(e) {
 		console.log("Raw:", e.value);
 		const date = extractDate(e.value);
 
-		outputElem.innerText = e.value;
-
 		console.log("Extracted:", date);
 		console.groupEnd();
 
@@ -268,6 +266,8 @@ function dateOnChange(e) {
 		console.log(
 			dayOfWeek[(yearAnchor - (closestDoomsday - date.day) + 7) % 7]
 		);
+		outputElem.innerText =
+			dayOfWeek[(yearAnchor - (closestDoomsday - date.day) + 7) % 7];
 		console.groupEnd();
 	} else {
 		outputElem.innerText = doomsdayPlaceholder;
