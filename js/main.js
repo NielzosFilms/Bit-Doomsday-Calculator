@@ -167,7 +167,7 @@ function getYearAnchorDate(year) {
 	);
 	console.log(`Day ${output} == ${dayOfWeek[output]}`);
 
-	console.log("Return", dayOfWeek[output]);
+	console.log("Return", output);
 	console.groupEnd();
 	return output;
 }
@@ -186,18 +186,23 @@ function getDatesArrayFromMonths(
 	nextMonth,
 	isLeap
 ) {
+	console.group("getDatesArrayFromMonths()");
 	let output = [];
 
 	previousMonth.dates.forEach((date) => {
 		output.push(-previousMonth.days + date);
 	});
+	console.log("Add previous month to output with offset:", output);
 
 	output = [...output, ...currentMonth.dates];
+	console.log("Add current month:", output);
 
 	nextMonth.dates.forEach((date) => {
 		output.push(currentMonth.days + date);
 	});
+	console.log("Add next month to output with offset:", output);
 
+	console.groupEnd();
 	return output;
 }
 
@@ -218,7 +223,9 @@ function getMonth(index, isLeap) {
  * @param {object} date
  */
 function getClosestDoomsday(date) {
+	console.group("getClosestDoomsday()");
 	const monthNumber = date.month - 1;
+	console.log("monthNumber = (date.month - 1) = ", monthNumber);
 
 	const currentMonth = getMonth(monthNumber, leapYear(date.year));
 	const nextMonth = getMonth((monthNumber + 1) % 12, leapYear(date.year));
@@ -226,7 +233,18 @@ function getClosestDoomsday(date) {
 		monthNumber === 0 ? 11 : monthNumber - 1,
 		leapYear(date.year)
 	);
+	console.group(
+		"Get the doomsday data from 'previousMonth', 'currentMonth' and 'nextMonth' relative to the selected month"
+	);
+	console.log("Also keep in mind if the year is a leap year.");
+	console.log("previousMonth", previousMonth);
+	console.log("currentMonth", currentMonth);
+	console.log("nextMonth", nextMonth);
+	console.groupEnd();
 
+	console.log(
+		"Add all of the dates from those months into the same array, to easily look up the closest number."
+	);
 	const closestDate = getClosestNumber(
 		date.day,
 		getDatesArrayFromMonths(
@@ -236,6 +254,9 @@ function getClosestDoomsday(date) {
 			leapYear(date.year)
 		)
 	);
+	console.log("Found the closest date in the given array:", closestDate);
+
+	console.log("Now remove the offset given earlier, and return the result");
 
 	if (closestDate - currentMonth.days > 0) {
 		return closestDate - currentMonth.days;
@@ -260,14 +281,19 @@ function dateOnChange(e) {
 		console.groupEnd();
 
 		const yearAnchor = getYearAnchorDate(date.year);
-		console.log(yearAnchor);
 		const closestDoomsday = getClosestDoomsday(date);
-		console.log(closestDoomsday);
+		console.log("getClosestDoomsday() Result: ", closestDoomsday);
+		const dayOfWeekNumber =
+			(yearAnchor - (closestDoomsday - date.day) + 7) % 7;
 		console.log(
-			dayOfWeek[(yearAnchor - (closestDoomsday - date.day) + 7) % 7]
+			"Calculate the day number with the closestDoomsday ((yearAnchor - (closestDoomsday - date.day) + 7) % 7) =",
+			dayOfWeekNumber
 		);
-		outputElem.innerText =
-			dayOfWeek[(yearAnchor - (closestDoomsday - date.day) + 7) % 7];
+		console.log(
+			`The day ${dayOfWeekNumber} is equal to`,
+			dayOfWeek[dayOfWeekNumber]
+		);
+		outputElem.innerText = dayOfWeek[dayOfWeekNumber];
 		console.groupEnd();
 	} else {
 		outputElem.innerText = doomsdayPlaceholder;
