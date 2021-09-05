@@ -10,6 +10,73 @@ const dayOfWeek = [
 	"Saturday",
 ];
 
+const doomsdays = {
+	January: {
+		common: {
+			dates: [3, 10, 17, 24, 31],
+			days: 31,
+		},
+		leap: {
+			dates: [4, 11, 18, 25],
+			days: 31,
+		},
+	},
+	February: {
+		common: {
+			dates: [7, 14, 21, 28],
+			days: 28,
+		},
+		leap: {
+			dates: [1, 8, 15, 22, 29],
+			days: 29,
+		},
+	},
+	March: {
+		dates: [7, 14, 21, 28],
+		days: 31,
+	},
+	April: {
+		dates: [4, 11, 18, 25],
+		days: 30,
+	},
+	May: {
+		dates: [2, 9, 16, 23, 30],
+		days: 31,
+	},
+	June: {
+		dates: [6, 13, 20, 27],
+		days: 30,
+	},
+	July: {
+		dates: [4, 11, 18, 25],
+		days: 31,
+	},
+	August: {
+		dates: [1, 8, 15, 22, 29],
+		days: 31,
+	},
+	September: {
+		dates: [5, 12, 19, 26],
+		days: 30,
+	},
+	October: {
+		dates: [3, 10, 17, 24, 31],
+		days: 31,
+	},
+	November: {
+		dates: [7, 14, 21, 28],
+		days: 30,
+	},
+	December: {
+		dates: [5, 12, 19, 26],
+		days: 31,
+	},
+};
+
+function leapYear(year) {
+	return (year % 4 == 0 && year % 100 != 0) || year % 400 == 0;
+}
+
 function isEven(number) {
 	return number % 2 === 0;
 }
