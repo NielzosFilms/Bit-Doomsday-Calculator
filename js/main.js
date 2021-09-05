@@ -258,6 +258,8 @@ function getClosestDoomsday(date) {
 
 	console.log("Now remove the offset given earlier, and return the result");
 
+	console.groupEnd();
+
 	if (closestDate - currentMonth.days > 0) {
 		return closestDate - currentMonth.days;
 	} else if (
