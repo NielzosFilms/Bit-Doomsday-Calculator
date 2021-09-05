@@ -29,3 +29,23 @@ main {
 .shadow {
 	box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.3);
 }
+
+#date {
+	background-color: var(--main-white);
+	border: none;
+	padding: 5px;
+	border-radius: 3px;
+}
+
+#doomsday-text {
+	padding-top: 20px;
+	color: var(--main-secondary);
+	text-shadow: 0px 0px 5px var(--main-secondary);
+	animation: blink 1.5s linear infinite;
+}
+
+@keyframes blink {
+	90% {
+		opacity: 0.5;
+	}
+}
