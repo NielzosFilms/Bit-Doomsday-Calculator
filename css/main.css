@@ -1,0 +1,31 @@
+:root {
+	--main-primary: #087e8b;
+	--main-secondary: #ff5a5f;
+	--main-tertiary: #c1839f;
+	--main-black: #3c3c3c;
+	--main-background: #302f2f;
+	--main-white: #f5f5f5;
+}
+
+body {
+	font-family: monospace;
+	background-color: var(--main-background);
+	color: var(--main-white);
+}
+
+main {
+	margin-left: 20%;
+	margin-right: 20%;
+	background-color: var(--main-black);
+}
+
+.paper {
+	padding: 5px;
+	padding-left: 20px;
+	padding-right: 20px;
+	border-radius: 5px;
+}
+
+.shadow {
+	box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.3);
+}
