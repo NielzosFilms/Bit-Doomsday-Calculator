@@ -49,3 +49,14 @@ main {
 		opacity: 0.5;
 	}
 }
+
+@keyframes easterEggBlink {
+	90% {
+		background-color: var(--main-background);
+	}
+}
+
+.easterEgg {
+	background-color: #72282a;
+	animation: easterEggBlink 1.5s linear infinite;
+}
