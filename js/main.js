@@ -82,6 +82,17 @@ function isEven(number) {
 }
 
 /**
+ *
+ * @param {number} needle
+ * @param {Array} haystack
+ */
+function getClosestNumber(needle, haystack) {
+	return haystack.reduce((a, b) =>
+		Math.abs(b - needle) < Math.abs(a - needle) ? b : a
+	);
+}
+
+/**
  * @param {string} date
  * @returns {object}
  */
@@ -161,9 +172,86 @@ function getYearAnchorDate(year) {
 	return output;
 }
 
+/**
+ *
+ * @param {object} previousMonth
+ * @param {object} currentMonth
+ * @param {object} nextMonth
+ * @param {boolean} isLeap
+ * @returns {Array} Absolute dates
+ */
+function getDatesArrayFromMonths(
+	previousMonth,
+	currentMonth,
+	nextMonth,
+	isLeap
+) {
+	let output = [];
+
+	previousMonth.dates.forEach((date) => {
+		output.push(-previousMonth.days + date);
+	});
+
+	output = [...output, ...currentMonth.dates];
+
+	nextMonth.dates.forEach((date) => {
+		output.push(currentMonth.days + date);
+	});
+
+	return output;
+}
+
+/**
+ * @param {number} index
+ * @param {boolean} isLeap
+ * @returns {object} Month
+ */
+function getMonth(index, isLeap) {
+	const month = doomsdays[Object.keys(doomsdays)[index]];
+	if (month.leap) {
+		return isLeap ? month.leap : month.common;
+	}
+	return month;
+}
+
+/**
+ * @param {object} date
+ */
+function getClosestDoomsday(date) {
+	const monthNumber = date.month - 1;
+
+	const currentMonth = getMonth(monthNumber, leapYear(date.year));
+	const nextMonth = getMonth((monthNumber + 1) % 12, leapYear(date.year));
+	const previousMonth = getMonth(
+		monthNumber === 0 ? 11 : monthNumber - 1,
+		leapYear(date.year)
+	);
+
+	const closestDate = getClosestNumber(
+		date.day,
+		getDatesArrayFromMonths(
+			previousMonth,
+			currentMonth,
+			nextMonth,
+			leapYear(date.year)
+		)
+	);
+
+	if (closestDate - currentMonth.days > 0) {
+		return closestDate - currentMonth.days;
+	} else if (
+		closestDate + previousMonth.days > 0 &&
+		closestDate + previousMonth.days < currentMonth.days
+	) {
+		return closestDate + previousMonth.days;
+	}
+	return closestDate;
+}
+
 function dateOnChange(e) {
 	const outputElem = document.getElementById("doomsday-text");
 	if (e.value) {
+		console.group("Bit Doomsday Calculator");
 		console.group("Extract the date:");
 		console.log("Raw:", e.value);
 		const date = extractDate(e.value);
@@ -174,6 +262,13 @@ function dateOnChange(e) {
 		console.groupEnd();
 
 		const yearAnchor = getYearAnchorDate(date.year);
+		console.log(yearAnchor);
+		const closestDoomsday = getClosestDoomsday(date);
+		console.log(closestDoomsday);
+		console.log(
+			dayOfWeek[(yearAnchor - (closestDoomsday - date.day) + 7) % 7]
+		);
+		console.groupEnd();
 	} else {
 		outputElem.innerText = doomsdayPlaceholder;
 	}
